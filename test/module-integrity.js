@@ -3,6 +3,7 @@ import test from 'tape';
 import module from '../src';
 
 test('Module integrity', assert => {
+  const asyncTests = [];
 
   assert.ok(module
     , `module should be defined`);
@@ -10,10 +11,39 @@ test('Module integrity', assert => {
   assert.ok(module instanceof Function
     , `module should be a function`);
   
-  const cacheable = sinon.spy();
-  module.call({ cacheable });
-  assert.equal(cacheable.called, true
-    , `Loader is cacheable`);
+  const markdown = 
+    `
+    # Markdown with two code blocks
+
+    \`\`\`mermaid
+    graph TD;
+      a-->b;
+    \`\`\`
+
+    \`\`\`mermaid
+    graph TD;
+      a-->b;
+      b-->a;
+    \`\`\`
+    `;
+
+  const expectedResult = 
+    `
+    # Markdown with two code blocks
+
+    \`\`\`mermaid
+    graph TD;
+      a-->b;
+    \`\`\`
+
+    \`\`\`mermaid
+    graph TD;
+      a-->b;
+      b-->a;
+    \`\`\`
+    `;
+  asyncTests.push(module(markdown).then(res => assert.equal(typeof res, 'string'
+    , `Running module should return parsed string`)));
   
-  assert.end();
+  Promise.all(asyncTests).then(() => assert.end());
 });
