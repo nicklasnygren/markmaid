@@ -4,7 +4,7 @@
   "description": "Process (github) markdown files and translate mermaid charts to images",
   "main": "dist/md-mermaid-loader.js",
   "scripts": {
-    "build": "browserify -t babelify src/main.js > dist/md-mermaid-loader.js",
+    "build": "browserify -t babelify src/index.js > dist/md-mermaid-loader.js",
     "clean": "rm -rf dist/*",
     "test": "browserify -t babelify test/*.js | node | faucet",
     "watch": "nodemon -q -w ./src -w ./test -e js -x npm run test 2> /dev/null"
@@ -19,6 +19,7 @@
     "browserify": "^13.0.0",
     "faucet": "0.0.1",
     "nodemon": "^1.9.1",
+    "sinon": "^1.17.3",
     "tape": "^4.5.1"
   }
 }

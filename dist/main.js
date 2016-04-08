@@ -5,5 +5,5 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = markdownMermaidLoader;
 function markdownMermaidLoader(source) {
-  //
+  this.cacheable();
 }
