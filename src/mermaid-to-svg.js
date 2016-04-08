@@ -1,13 +1,16 @@
-import { resolve } from 'path';
+import { resolve, join } from 'path';
 import JsSHA from 'jssha';
 import { exec } from 'child_process';
 import { writeFile } from 'fs';
 
-const TEMP_PATH = '/tmp';
+const MERMAID_PATH = process.env.MERMAID_PATH || resolve(__dirname, '..', 'node_modules', 'mermaid');
+const CMD_PATH = join(MERMAID_PATH, 'bin', 'mermaid.js');
+const DEFAULT_STYLE = resolve(__dirname, '..', 'src', 'default-style.css');
 const IMG_PATH = resolve(__dirname, '..', 'dist');
+const TEMP_PATH = '/tmp';
 
-function getImageFilename(hash) {
- return `${IMG_PATH}/${hash}.png`;
+function getImageFilename(hash, dir) {
+ return `${dir || IMG_PATH}/${hash}.png`;
 }
 
 function getTempFile(hash) {
@@ -34,22 +37,25 @@ function writeTempDefinitionFile(input) {
   });
 }
 
-function writeSvgFile(hash) {
+function writeSvgFile(hash, dir) {
   return new Promise((resolve, reject) => {
-    exec(`mermaid ${getTempFile(hash)} -o ${IMG_PATH}`, (error, stdout, stderr) => {
-      if (error) {
-        reject(err);
+    exec(
+      `node ${CMD_PATH} ${getTempFile(hash)} -o ${dir || IMG_PATH} -t ${DEFAULT_STYLE} -w 1280`,
+      (error, stdout, stderr) => {
+        if (error) {
+          reject(error);
+        }
+        else {
+          resolve(getImageFilename(hash, dir));
+        }
       }
-      else {
-        resolve(getImageFilename(hash));
-      }
-    });
+    );
   });
 }
 
-function createSvg(input) {
+function createSvg(input, dir) {
   return writeTempDefinitionFile(input)
-    .then(writeSvgFile);
+    .then(hash => writeSvgFile(hash, dir));
 }
 
 export {

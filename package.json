@@ -1,14 +1,18 @@
 {
-  "name": "md-mermaid-loader",
+  "name": "markmaid",
   "version": "0.0.1",
   "description": "Process (github) markdown files and translate mermaid charts to images",
   "main": "dist/md-mermaid-loader.js",
   "scripts": {
-    "build": "browserify --node -t babelify src/index.js > dist/md-mermaid-loader.js",
+    "build": "npm run clean && browserify --node -t babelify -o dist/cli.js src/cli.js",
     "clean": "rm -rf dist/*",
+    "mermaid": "mermaid",
+    "postinstall": "npm run build",
     "test": "browserify --node -t babelify test/*.js | node | faucet",
-    "watch": "nodemon -q -w ./src -w ./test -e js -x npm run test 2> /dev/null",
-    "mermaid": "mermaid"
+    "watch": "nodemon -q -w ./src -w ./test -e js -x npm run test 2> /dev/null"
+  },
+  "bin": {
+    "markmaid": "dist/cli.js"
   },
   "author": "Nicklas Nygren",
   "license": "MIT",
@@ -25,8 +29,11 @@
     "tape": "^4.5.1"
   },
   "dependencies": {
+    "glob": "^7.0.3",
     "jssha": "^2.0.2",
     "mermaid": "^0.5.8",
+    "minimist": "^1.2.0",
+    "mkdirp": "^0.5.1",
     "phantomjs": "^1.9.8"
   }
 }

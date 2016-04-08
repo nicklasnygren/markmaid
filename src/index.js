@@ -4,15 +4,15 @@ import { relative, resolve } from 'path';
 
 const ROOT = resolve(__dirname, '..');
 
-function markdownMermaidLoader(input) {
+function markdownMermaidLoader(input, dir) {
   const { matches, output } = parse(input);
 
   return Promise.all(
-    matches.map(match => createImage(match.code).then(
+    matches.map(match => createImage(match.code, dir).then(
       filename => Object.assign(match, { filename: relative(ROOT, filename) })
     ))
   ).then(matches => matches.reduce(
-     (str, { filename, placeholder }) => str.replace(placeholder, `[[${filename}]]`), output
+     (str, { filename, placeholder }) => str.replace(placeholder, `![img](${filename})`), output
   ));
 }
 
