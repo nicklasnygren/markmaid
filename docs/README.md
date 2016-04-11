@@ -1,6 +1,10 @@
 # markmaid
 
-CLI tool that parses markdown files and renders mermaid snippets as images.
+[![Build Status](https://travis-ci.org/nicklasnygren/markmaid.svg?branch=master)](https://travis-ci.org/nicklasnygren/markmaid)
+
+CLI tool to parse markdown files and renders [Mermaid](https://github.com/knsv/mermaid) snippets as images.
+
+Requires Node 4.0 or greater.
 
 ## How it works
 
@@ -13,11 +17,11 @@ CLI tool that parses markdown files and renders mermaid snippets as images.
 ```mermaid
 graph TB
   subgraph Github repo
-    A1("$ROOT/README.mdd")
+    A1("$ROOT/docs/README.md")
     A2("$ROOT/README.md")
   end
-  subgraph markmaid *.md
-    B1(Break out mermaid snippets) -. Render snippets .-> B2("$ROOT/docs/img/[sha-1].png")
+  subgraph markmaid 'docs/**/*.md'
+    B1(Break out mermaid snippets) -. Render snippets .-> B2("$ROOT/docs/img/<sha-1>.png")
   end
   A1 -.->A2
   A1 ==> B1

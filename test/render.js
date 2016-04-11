@@ -1,15 +1,15 @@
 import sinon from 'sinon';
 import test from 'tape';
-import module from '../src';
+import render from '../src/render';
 
-test('Module integrity', assert => {
+test('Render', assert => {
   const asyncTests = [];
 
-  assert.ok(module
-    , `module should be defined`);
+  assert.ok(render
+    , `render should be defined`);
   
-  assert.ok(module instanceof Function
-    , `module should be a function`);
+  assert.ok(render instanceof Function
+    , `render should be a function`);
   
   const markdown = 
     `
@@ -42,8 +42,8 @@ test('Module integrity', assert => {
       b-->a;
     \`\`\`
     `;
-  asyncTests.push(module(markdown).then(res => assert.equal(typeof res, 'string'
-    , `Running module should return parsed string`)));
+  asyncTests.push(render(markdown).then(res => assert.equal(typeof res, 'string'
+    , `Running render should return parsed string`)));
   
   Promise.all(asyncTests).then(() => assert.end());
 });

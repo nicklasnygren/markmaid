@@ -4,7 +4,7 @@ import { relative, resolve } from 'path';
 
 const ROOT = resolve(__dirname, '..');
 
-function markdownMermaidLoader(input, dir) {
+function parseMarkdown(input, dir) {
   const { matches, output } = parse(input);
 
   return Promise.all(
@@ -17,5 +17,5 @@ function markdownMermaidLoader(input, dir) {
 }
 
 export {
-  markdownMermaidLoader as default,
+  parseMarkdown as default,
 };

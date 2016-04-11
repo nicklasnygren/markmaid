@@ -1,5 +1,5 @@
 import parseArgs from 'minimist';
-import replaceCodeBlocks from '.';
+import render from './render';
 import glob from 'glob';
 import mkdirp from 'mkdirp';
 import { resolve as _resolve } from 'path';
@@ -38,6 +38,6 @@ filenames.forEach(filename => {
   const writePath = resolve(outputDir);
   path = resolve(path.join('/'));
 
-  replaceCodeBlocks(readFileSync(resolve(filename), 'utf-8'), imageDir)
+  render(readFileSync(resolve(filename), 'utf-8'), imageDir)
     .then(newFileContent => writeFileSync(`${writePath}/${baseName}.md`, newFileContent));
 });

@@ -1,6 +1,10 @@
 # markmaid
 
-CLI tool that parses markdown files and renders mermaid snippets as images.
+[![Build Status](https://travis-ci.org/nicklasnygren/markmaid.svg?branch=master)](https://travis-ci.org/nicklasnygren/markmaid)
+
+CLI tool to parse markdown files and renders [Mermaid](https://github.com/knsv/mermaid) snippets as images.
+
+Requires Node 4.0 or greater.
 
 ## How it works
 
@@ -10,7 +14,7 @@ CLI tool that parses markdown files and renders mermaid snippets as images.
 3. Commit and push
 4. View the rendered result in your Github docs
 
-![img](docs/img/bea41dcd4dcc442719807c67ada36f4a210b3376.png)
+![img](docs/img/108d88de7bc67ea3dcc1af6a32ae2b4f0438cba8.png)
 
 ## Installation
 

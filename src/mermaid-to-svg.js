@@ -6,7 +6,7 @@ import { writeFile } from 'fs';
 const MERMAID_PATH = process.env.MERMAID_PATH || resolve(__dirname, '..', 'node_modules', 'mermaid');
 const CMD_PATH = join(MERMAID_PATH, 'bin', 'mermaid.js');
 const DEFAULT_STYLE = resolve(__dirname, '..', 'src', 'default-style.css');
-const IMG_PATH = resolve(__dirname, '..', 'dist');
+const IMG_PATH = resolve(__dirname, '..', 'testrun');
 const TEMP_PATH = '/tmp';
 
 function getImageFilename(hash, dir) {
