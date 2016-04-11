@@ -7,7 +7,7 @@ function parseMarkdown(input, dir) {
 
   return Promise.all(
     matches.map(match => createImage(match.code, dir).then(
-      filename => Object.assign(match, { filename: resolve(process.cwd(), filename) })
+      filename => Object.assign(match, { filename: relative(process.cwd(), filename) })
     ))
   ).then(matches => matches.reduce(
      (str, { filename, placeholder }) => str.replace(placeholder, `![img](${filename})`), output

@@ -15,7 +15,7 @@ Requires Node 4.0 or greater.
 
 As flow chart | As sequence diagram
 --- | ---
-![img](/Users/nicklasnygren/repos/md-mermaid-loader/docs/img/108d88de7bc67ea3dcc1af6a32ae2b4f0438cba8.png) | ![img](/Users/nicklasnygren/repos/md-mermaid-loader/docs/img/99bc8e408631eb49644115fc35ae4c216d40f583.png)
+![img](docs/img/108d88de7bc67ea3dcc1af6a32ae2b4f0438cba8.png) | ![img](docs/img/99bc8e408631eb49644115fc35ae4c216d40f583.png)
 
 It even works in tables!
 
