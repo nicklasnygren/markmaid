@@ -1,6 +1,6 @@
 {
   "name": "markmaid",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Process (github) markdown files and translate mermaid charts to images",
   "main": "dist/md-mermaid-loader.js",
   "repository": {
