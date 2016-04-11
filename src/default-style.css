@@ -32,6 +32,7 @@ span.edgeLabel {
 .node polygon + .label {
   color: #4078c0;
 }
+
 .node rect,
 .node circle,
 .node ellipse,
@@ -55,11 +56,11 @@ span.edgeLabel {
   fill: #333;
 }
 .actor {
-  stroke: #CCCCFF;
-  fill: #ECECFF;
+  stroke: #c9e6f2;
+  fill: #f2f9fc;
 }
 text.actor {
-  fill: black;
+  fill: #4078c0;
   stroke: none;
 }
 .actor-line {
@@ -69,19 +70,19 @@ text.actor {
   stroke-width: 1.5;
   stroke-dasharray: "2 2";
   marker-end: "url(#arrowhead)";
-  stroke: #333;
+  stroke: #666;
 }
 .messageLine1 {
   stroke-width: 1.5;
   stroke-dasharray: "2 2";
-  stroke: #333;
+  stroke: #666;
 }
 #arrowhead {
-  fill: #333;
+  fill: #666;
 }
 #crosshead path {
-  fill: #333 !important;
-  stroke: #333 !important;
+  fill: #666 !important;
+  stroke: #666 !important;
 }
 .messageText {
   fill: #333;
