@@ -13,9 +13,12 @@
     "clean": "rm -rf dist && mkdir dist",
     "prepublish": "npm run build",
     "test": "rm -rf testrun && mkdir testrun && browserify --node -t babelify test/*.js | node | faucet",
-    "watch": "nodemon -q -w ./src -w ./test -e js -x npm run test 2> /dev/null",
-    "cli": "markmaid"
+    "watch": "nodemon -q -w ./src -w ./test -e js -x npm run test 2> /dev/null"
   },
+  "files": [
+    "dist",
+    "docs"
+  ],
   "bin": {
     "markmaid": "dist/cli.js"
   },
