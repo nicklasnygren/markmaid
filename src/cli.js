@@ -1,80 +1,13 @@
 #!/usr/bin/env node
 
-import parseArgs from 'minimist';
-import render from './render';
+import chalk from 'chalk';
 import glob from 'glob';
 import mkdirp from 'mkdirp';
-import { resolve as _resolve } from 'path';
-import { readFileSync, writeFileSync } from 'fs';
-import chalk from 'chalk';
+import parseArgs from 'minimist';
 import pkg from '../package.json';
-
-if (false) {
-  const root = process.cwd();
-  const resolve = path => _resolve(root, path);
-  const options = parseArgs(process.argv.slice(2));
-  const [ pattern ] = options._;
-  const info = chalk.blue.bold;
-
-  if (!pattern || options.help) {
-    console.log(
-  `
-  ${info('Usage: markmaid [options] <files|pattern>...')}
-  
-  File      The mermaid-powered markdown files to be rendered
-  Pattern   String of file pattern to render. Handles ** globs.
-  
-  Options:
-    --output-dir      Output root for compiled .md files
-    --image-dir       Output root for saved .png files
-  `
-    );
-  }
-  
-  else {
-    const imageDir = resolve(options['image-dir'] || 'docs/img');
-    mkdirp.sync(imageDir); 
-  
-    let outputDir;
-    if (options['output-dir']) {
-      outputDir = resolve(options['output-dir']);
-      mkdirp.sync(outputDir); 
-    }
-    else {
-      outputDir = root;
-    }
-  
-    let filenames;
-    try {
-      filenames = glob.sync(pattern) ;
-      if (!filenames || !filenames.length) {
-        throw new Error();
-      }
-    }
-    catch (err) {
-      filenames = pattern;
-    }
-  
-    Promise.all(filenames.map(filename => {
-        let path = filename.split('/');
-        const [ baseName, ext ] = path.pop().split('.');
-        const writePath = resolve(outputDir);
-        path = resolve(path.join('/'));
-  
-        return render(readFileSync(resolve(filename), 'utf-8'), imageDir)
-          .then(parsed => {
-            const filePath = `${writePath}/${baseName}.md`;
-            writeFileSync(filePath, parsed.markdown)
-            return [filePath, ...parsed.images];
-          });
-      }))
-      .then(res => {
-        const files = Array.prototype.concat.apply([], res);
-        process.stdout.write(files.join('\n'));
-        process.exit();
-      });
-  }
-}
+import render from './render';
+import { readFileSync, writeFileSync } from 'fs';
+import { resolve as _resolve } from 'path';
 
 /**
  * @class MarkmaidCLI
@@ -86,12 +19,25 @@ class MarkmaidCLI {
    * @param {Array} params
    * @param {Function} next
    */
-  parse(params = [], next) {
+  parse(params = [], next = Function.prototype) {
 
     this.options = parseArgs(params);
     this.options.files = this.options._;
     this.options.outputDir = MarkmaidCLI.resolve(this.options['output-dir']);
     this.options.imageDir = MarkmaidCLI.resolve(this.options['image-dir'] || 'docs/img');
+
+    this.err = null;
+    this.message = null;
+
+    if (!this.options.files || this.options.help) {
+      next(null, this.getHelpText());
+    }
+    else if (this.options.version) {
+      next(null, MarkmaidCLI.version());
+    }
+    else {
+      next(null, null, this.options);
+    }
 
     return this;
   }
@@ -164,6 +110,37 @@ class MarkmaidCLI {
     }
 
     return filenames;
+  }
+
+  /**
+   * @function process
+   * @param {Array} files
+   * @param {Object} options
+   *
+   * TODO: Move to lib
+   */
+  process(files, options) {
+    const { resolve } = MarkmaidCLI;
+    const { outputDir, imageDir } = options;
+
+    return Promise.all(files.map(filename => {
+        let path = filename.split('/');
+        const [ baseName, ext ] = path.pop().split('.');
+        const writePath = resolve(outputDir);
+        path = resolve(path.join('/'));
+  
+        return render(readFileSync(resolve(filename), 'utf-8'), imageDir)
+          .then(parsed => {
+            const filePath = `${writePath}/${baseName}.md`;
+            writeFileSync(filePath, parsed.markdown)
+            return [filePath, ...parsed.images];
+          });
+      }))
+      .then(res => {
+        const files = Array.prototype.concat.apply([], res);
+        process.stdout.write(files.join('\n'));
+        process.exit();
+      });
   }
 }
 
