@@ -2,13 +2,13 @@
   "name": "markmaid",
   "version": "0.1.3",
   "description": "Process (github) markdown files and translate mermaid charts to images",
-  "main": "dist/md-mermaid-loader.js",
+  "main": "dist/cli.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/nicklasnygren/markmaid"
   },
   "scripts": {
-    "build": "npm run clean && echo '#!/usr/bin/env node' > dist/cli.js && browserify --node -t babelify src/cli.js >> dist/cli.js",
+    "build": "npm run clean && echo '#!/usr/bin/env node' > dist/cli.js && browserify --node -t babelify index.js >> dist/cli.js",
     "build-docs": "rm -rf docs/img; babel-node src/cli.js ./docs/**/*.md --output-dir . --image-dir docs/img | xargs git add",
     "clean": "rm -rf dist && mkdir dist",
     "prepublish": "npm run build",
