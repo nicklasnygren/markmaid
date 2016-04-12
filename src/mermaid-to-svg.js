@@ -40,7 +40,7 @@ function writeTempDefinitionFile(input) {
 function writeSvgFile(hash, dir) {
   return new Promise((resolve, reject) => {
     exec(
-      `node ${CMD_PATH} ${getTempFile(hash)} -o ${dir || IMG_PATH} -t ${DEFAULT_STYLE} -w 1280`,
+      `node ${CMD_PATH} -o ${dir || IMG_PATH} -t ${DEFAULT_STYLE} -w 1776 ${getTempFile(hash)}`,
       (error, stdout, stderr) => {
         if (error) {
           reject(error);
