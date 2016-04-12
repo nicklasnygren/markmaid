@@ -19,7 +19,8 @@ class MarkmaidCLI {
    */
   parse(params = [], next = Function.prototype) {
     this.options = parseArgs(params);
-    this.options.files = this.options._;
+    this.options.files = MarkmaidCLI.lookupFiles(this.options._);
+
     this.options.outputDir = MarkmaidCLI.resolve(this.options['output-dir']);
     this.options.imageDir = MarkmaidCLI.resolve(this.options['image-dir'] || 'docs/img');
 
@@ -88,22 +89,21 @@ class MarkmaidCLI {
   static lookupFiles(files, options) {
     let filenames;
 
-    if (!Array.isArray(files)) {
-      try {
-        filenames = glob.sync(files, Object.assign({
-          ignore: [`node_modules/${files}`],
-        }, options));
+    try {
+      filenames = [].concat(...files.map(f => glob.sync(f, Object.assign({
+        ignore: [`node_modules/${files}`],
+      }, options))));
 
-        if (!filenames || !filenames.length) {
-          throw new Error();
-        }
-      }
-      catch (err) {
-        filenames = [files];
+      if (!filenames || !filenames.length) {
+        throw new Error();
       }
     }
-    else {
+    catch (err) {
       filenames = files;
+    }
+
+    if (!Array.isArray(filenames)) {
+      filenames = [filenames];
     }
 
     return filenames;

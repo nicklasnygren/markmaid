@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "npm run clean && echo '#!/usr/bin/env node' > dist/cli.js && browserify --node -t babelify index.js >> dist/cli.js",
-    "build-docs": "rm -rf docs/img; babel-node src/cli.js ./docs/**/*.md --output-dir . --image-dir docs/img | xargs git add",
+    "build-docs": "rm -rf docs/img; babel-node index.js './docs/**/*.md' --output-dir . --image-dir docs/img | xargs git add",
     "clean": "rm -rf dist && mkdir dist",
     "prepublish": "npm run build",
     "test": "rm -rf testrun && mkdir testrun && browserify --node -t babelify test/*.js | node | faucet",

@@ -46,7 +46,7 @@ test('CLI', assert => {
   );
 
   assert.deepEqual(
-    MarkmaidCLI.lookupFiles('**/*.md'),
+    MarkmaidCLI.lookupFiles(['**/*.md']),
     ['docs/README.md', 'README.md'],
     `MarkmaidCLI.lookupFiles() resolves glob patterns`);
   
