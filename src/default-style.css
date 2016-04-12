@@ -21,9 +21,16 @@ body {
   overflow: visible;
 }
 
-span.edgeLabel {
+.edgeLabel {
+  overflow: visible;
+}
+span.edgeLabel:not(:empty) {
   color: #666;
-  background: rgba(255, 255, 255, .9);
+  background: #f1e05a;
+  border: .1rem solid #ddd;
+  padding: .3rem;
+  font-size: .8rem;
+  line-height: 1.6rem;
 }
 
 .node rect + .label,
@@ -44,7 +51,10 @@ span.edgeLabel {
   stroke-width: 1px;
 }
 .edgePath .path {
-  stroke: #333;
+  stroke: #666 !important;
+}
+.edgePath marker path {
+  fill: #666 !important;
 }
 .cluster rect {
   fill: #f5f5f5 !important;
@@ -107,8 +117,8 @@ text.actor {
   stroke: #CCCCFF;
 }
 .note {
-  stroke: #aaaa33;
-  fill: #fff5ad;
+  stroke: #ddd;
+  fill: #f1e05a;
 }
 .noteText {
   fill: black;
