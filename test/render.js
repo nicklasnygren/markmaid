@@ -42,7 +42,7 @@ test('Render', assert => {
       b-->a;
     \`\`\`
     `;
-  asyncTests.push(render(markdown).then(res => assert.equal(typeof res, 'string'
+  asyncTests.push(render(markdown).then(res => assert.equal(typeof res, 'object'
     , `Running render should return parsed string`)));
   
   Promise.all(asyncTests).then(() => assert.end());

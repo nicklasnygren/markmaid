@@ -7,11 +7,11 @@ import mkdirp from 'mkdirp';
 import { resolve as _resolve } from 'path';
 import { readFileSync, writeFileSync } from 'fs';
 import chalk from 'chalk';
+
 const root = process.cwd();
 const resolve = path => _resolve(root, path);
 const options = parseArgs(process.argv.slice(2));
 const [ pattern ] = options._;
-
 const info = chalk.blue.bold;
 
 if (!pattern || options.help) {
@@ -53,13 +53,22 @@ else {
     filenames = pattern;
   }
   
-  filenames.forEach(filename => {
-    let path = filename.split('/');
-    const [ baseName, ext ] = path.pop().split('.');
-    const writePath = resolve(outputDir);
-    path = resolve(path.join('/'));
-  
-    render(readFileSync(resolve(filename), 'utf-8'), imageDir)
-      .then(newFileContent => writeFileSync(`${writePath}/${baseName}.md`, newFileContent));
-  });
+  Promise.all(filenames.map(filename => {
+      let path = filename.split('/');
+      const [ baseName, ext ] = path.pop().split('.');
+      const writePath = resolve(outputDir);
+      path = resolve(path.join('/'));
+    
+      return render(readFileSync(resolve(filename), 'utf-8'), imageDir)
+        .then(parsed => {
+          const filePath = `${writePath}/${baseName}.md`;
+          writeFileSync(filePath, parsed.markdown)
+          return [filePath, ...parsed.images];
+        });
+    }))
+    .then(res => {
+      const files = Array.prototype.concat.apply([], res);
+      process.stdout.write(files.join('\n'));
+      process.exit();
+    });
 }

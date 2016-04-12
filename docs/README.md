@@ -9,7 +9,7 @@ Requires Node 4.0 or greater.
 
 1. Create a readme file with mermaid code snippet (for example, see the [readme source for
    this project](docs/README.md)).
-2. Run `markmaid [filename]`
+2. Run `markmaid [filename] | xargs git add`
 3. Commit and push
 4. View the rendered result in your Github docs
 
@@ -39,6 +39,7 @@ sequenceDiagram
     Mermaid->> Markmaid: Return PNG
     Markmaid->> Repo: Write PNG to docs
     Markmaid->> Repo: Link PNG in procesed .md
+    Note left of Repo: Use in git pre-commit hook, etc.
 ```
 
 It even works in tables!

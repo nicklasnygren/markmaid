@@ -9,9 +9,18 @@ function parseMarkdown(input, dir) {
     matches.map(match => createImage(match.code, dir).then(
       filename => Object.assign(match, { filename: relative(process.cwd(), filename) })
     ))
-  ).then(matches => matches.reduce(
-     (str, { filename, placeholder }) => str.replace(placeholder, `![img](${filename})`), output
-  ));
+  ).then(matches => {
+    const markdown = matches.reduce(
+      (str, { filename, placeholder }) => {
+        return str.replace(placeholder, `![img](${filename})`);
+      }, output
+    );
+
+    return {
+      markdown,
+      images: matches.map(m => m.filename),
+    };
+  });
 }
 
 export {
