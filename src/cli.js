@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import chalk from 'chalk';
 import glob from 'glob';
 import mkdirp from 'mkdirp';
@@ -20,7 +18,6 @@ class MarkmaidCLI {
    * @param {Function} next
    */
   parse(params = [], next = Function.prototype) {
-
     this.options = parseArgs(params);
     this.options.files = this.options._;
     this.options.outputDir = MarkmaidCLI.resolve(this.options['output-dir']);
@@ -117,7 +114,7 @@ class MarkmaidCLI {
    * @param {Array} files
    * @param {Object} options
    *
-   * TODO: Move to lib
+   * TODO: Move to lib to make markmaid usable programmatically
    */
   process(files, options) {
     const { resolve } = MarkmaidCLI;
