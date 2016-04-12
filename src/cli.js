@@ -8,67 +8,101 @@ import { resolve as _resolve } from 'path';
 import { readFileSync, writeFileSync } from 'fs';
 import chalk from 'chalk';
 
-const root = process.cwd();
-const resolve = path => _resolve(root, path);
-const options = parseArgs(process.argv.slice(2));
-const [ pattern ] = options._;
-const info = chalk.blue.bold;
+if (false) {
+  const root = process.cwd();
+  const resolve = path => _resolve(root, path);
+  const options = parseArgs(process.argv.slice(2));
+  const [ pattern ] = options._;
+  const info = chalk.blue.bold;
 
-if (!pattern || options.help) {
-  console.log(
-`
-${info('Usage: markmaid [options] <files|pattern>...')}
-
-File      The mermaid-powered markdown files to be rendered
-Pattern   String of file pattern to render. Handles ** globs.
-
-Options:
-  --output-dir      Output root for compiled .md files
-  --image-dir       Output root for saved .png files
-`
-  )
-}
-
-else {
-  const imageDir = resolve(options['image-dir'] || 'docs/img');
-  mkdirp.sync(imageDir); 
-
-  let outputDir;
-  if (options['output-dir']) {
-    outputDir = resolve(options['output-dir']);
-    mkdirp.sync(outputDir); 
+  if (!pattern || options.help) {
+    console.log(
+  `
+  ${info('Usage: markmaid [options] <files|pattern>...')}
+  
+  File      The mermaid-powered markdown files to be rendered
+  Pattern   String of file pattern to render. Handles ** globs.
+  
+  Options:
+    --output-dir      Output root for compiled .md files
+    --image-dir       Output root for saved .png files
+  `
+    )
   }
+  
   else {
-    outputDir = root;
-  }
+    const imageDir = resolve(options['image-dir'] || 'docs/img');
+    mkdirp.sync(imageDir); 
   
-  let filenames;
-  try {
-    filenames = glob.sync(pattern) ;
-    if (!filenames || !filenames.length) {
-      throw new Error();
+    let outputDir;
+    if (options['output-dir']) {
+      outputDir = resolve(options['output-dir']);
+      mkdirp.sync(outputDir); 
     }
-  }
-  catch (err) {
-    filenames = pattern;
-  }
+    else {
+      outputDir = root;
+    }
   
-  Promise.all(filenames.map(filename => {
-      let path = filename.split('/');
-      const [ baseName, ext ] = path.pop().split('.');
-      const writePath = resolve(outputDir);
-      path = resolve(path.join('/'));
-    
-      return render(readFileSync(resolve(filename), 'utf-8'), imageDir)
-        .then(parsed => {
-          const filePath = `${writePath}/${baseName}.md`;
-          writeFileSync(filePath, parsed.markdown)
-          return [filePath, ...parsed.images];
-        });
-    }))
-    .then(res => {
-      const files = Array.prototype.concat.apply([], res);
-      process.stdout.write(files.join('\n'));
-      process.exit();
-    });
+    let filenames;
+    try {
+      filenames = glob.sync(pattern) ;
+      if (!filenames || !filenames.length) {
+        throw new Error();
+      }
+    }
+    catch (err) {
+      filenames = pattern;
+    }
+  
+    Promise.all(filenames.map(filename => {
+        let path = filename.split('/');
+        const [ baseName, ext ] = path.pop().split('.');
+        const writePath = resolve(outputDir);
+        path = resolve(path.join('/'));
+  
+        return render(readFileSync(resolve(filename), 'utf-8'), imageDir)
+          .then(parsed => {
+            const filePath = `${writePath}/${baseName}.md`;
+            writeFileSync(filePath, parsed.markdown)
+            return [filePath, ...parsed.images];
+          });
+      }))
+      .then(res => {
+        const files = Array.prototype.concat.apply([], res);
+        process.stdout.write(files.join('\n'));
+        process.exit();
+      });
+  }
 }
+
+/**
+ * @class MarkmaidCLI
+ */
+class MarkmaidCLI {
+
+  /**
+   * @function parse
+   * @param {Array} params
+   * @param {Function} next
+   */
+  parse(params, next) {
+    this.options = parseArgs(params);
+    this.options.files = this.options._;
+    return this;
+  }
+
+  /**
+   * @function resolve
+   * @param {String} path
+   */
+  static resolve(path) {
+    return _resolve(process.cwd(), path);
+  }
+}
+
+const cli = new MarkmaidCLI();
+
+export {
+  cli as default,
+  MarkmaidCLI,
+};
