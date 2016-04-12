@@ -7,6 +7,7 @@ import mkdirp from 'mkdirp';
 import { resolve as _resolve } from 'path';
 import { readFileSync, writeFileSync } from 'fs';
 import chalk from 'chalk';
+import pkg from '../package.json';
 
 if (false) {
   const root = process.cwd();
@@ -27,7 +28,7 @@ if (false) {
     --output-dir      Output root for compiled .md files
     --image-dir       Output root for saved .png files
   `
-    )
+    );
   }
   
   else {
@@ -85,18 +86,84 @@ class MarkmaidCLI {
    * @param {Array} params
    * @param {Function} next
    */
-  parse(params, next) {
+  parse(params = [], next) {
+
     this.options = parseArgs(params);
     this.options.files = this.options._;
+    this.options.outputDir = MarkmaidCLI.resolve(this.options['output-dir']);
+    this.options.imageDir = MarkmaidCLI.resolve(this.options['image-dir'] || 'docs/img');
+
     return this;
+  }
+
+  /**
+   * @function getHelpText
+   */
+  getHelpText() {
+    const { info } = MarkmaidCLI;
+
+    return [
+      info('Usage: markmaid [options] <file|pattern>'),
+      '',
+      'file   The markdown document to render',
+      '',
+      'Options:',
+      '  -o, --output-dir     Root directory for compiled markdown files',
+      '  -i, --image-dir      Root directory for rendered image files',
+      '  --version            Print version and quit',
+    ].join('\n');
   }
 
   /**
    * @function resolve
    * @param {String} path
    */
-  static resolve(path) {
+  static resolve(path = '') {
     return _resolve(process.cwd(), path);
+  }
+
+  /**
+   * @function info
+   * @param {Str} str
+   */
+  static info(str) {
+    return chalk.blue.bold(str);
+  }
+
+  /**
+   * @function static version
+   */
+  static version() {
+    return pkg.version;
+  }
+
+  /**
+   * @function static lookupFiles
+   * @param {Array|String} files
+   * @param {Object} options
+   */
+  static lookupFiles(files, options) {
+    let filenames;
+
+    if (!Array.isArray(files)) {
+      try {
+        filenames = glob.sync(files, Object.assign({
+          ignore: [`node_modules/${files}`],
+        }, options));
+
+        if (!filenames || !filenames.length) {
+          throw new Error();
+        }
+      }
+      catch (err) {
+        filenames = [files];
+      }
+    }
+    else {
+      filenames = files;
+    }
+
+    return filenames;
   }
 }
 
