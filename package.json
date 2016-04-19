@@ -17,7 +17,8 @@
   },
   "files": [
     "dist",
-    "docs"
+    "docs",
+    "src/default-style.css"
   ],
   "bin": {
     "markmaid": "dist/cli.js"
