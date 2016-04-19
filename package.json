@@ -8,7 +8,7 @@
     "url": "git://github.com/nicklasnygren/markmaid"
   },
   "scripts": {
-    "build": "npm run clean && echo '#!/usr/bin/env node' > dist/cli.js && browserify --node -t babelify -p browserify-derequire index.js >> dist/cli.js",
+    "build": "npm run clean && echo '#!/usr/bin/env node' > dist/cli.js && browserify --node --dg=false -t babelify -p browserify-derequire index.js >> dist/cli.js",
     "build-docs": "rm -rf docs/img; babel-node index.js './docs/**/*.md' --output-dir . --image-dir docs/img | xargs git add",
     "clean": "rm -rf dist && mkdir dist",
     "prepublish": "npm run build",
@@ -43,6 +43,7 @@
     "mermaid": "^0.5.8",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
+    "package.root": "^1.0.1",
     "phantomjs": "^1.9.8"
   }
 }
