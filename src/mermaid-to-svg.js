@@ -3,7 +3,8 @@ import JsSHA from 'jssha';
 import { exec } from 'child_process';
 import { writeFile } from 'fs';
 
-const MERMAID_PATH = process.env.MERMAID_PATH || resolve(__dirname, '..', 'node_modules', 'mermaid');
+const MERMAID_PATH = process.env.MERMAID_PATH || resolve(process.cwd(), 'node_modules', 'mermaid');
+const PHANTOM_PATH = process.env.MERMAID_PATH || resolve(process.cwd(), 'node_modules', 'phantomjs', 'bin', 'phantomjs');
 const CMD_PATH = join(MERMAID_PATH, 'bin', 'mermaid.js');
 const DEFAULT_STYLE = resolve(__dirname, '..', 'src', 'default-style.css');
 const IMG_PATH = resolve(__dirname, '..', 'testrun');
@@ -40,7 +41,7 @@ function writeTempDefinitionFile(input) {
 function writeSvgFile(hash, dir) {
   return new Promise((resolve, reject) => {
     exec(
-      `node ${CMD_PATH} -o ${dir || IMG_PATH} -t ${DEFAULT_STYLE} -w 1776 ${getTempFile(hash)}`,
+      `node ${CMD_PATH} -o ${dir || IMG_PATH} -t ${DEFAULT_STYLE} -w 1776 -e ${PHANTOM_PATH} ${getTempFile(hash)}`,
       (error, stdout, stderr) => {
         if (error) {
           reject(error);
